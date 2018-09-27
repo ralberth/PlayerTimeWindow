@@ -1,0 +1,7 @@
+schedules:
+  Player1:
+  Player2:
+    Mon: 9-11 13-16
+    Thu: 9-12
+  Player3:
+    Sat: 0-23

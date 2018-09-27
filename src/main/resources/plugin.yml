@@ -1,0 +1,10 @@
+name: ${project.name}
+version: ${project.version}
+main: com.github.ralberth.playertimewindow.PlayerTimeWindow
+
+commands:
+  timewindows:
+    description: Show what times you are allowed to play
+    usage: /timewindows
+    #        permission: playertimewindow.basic
+    #        permission-message: You don't have playertimewindow.basic
