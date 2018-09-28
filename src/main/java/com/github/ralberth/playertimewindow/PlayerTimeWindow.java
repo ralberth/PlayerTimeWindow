@@ -1,11 +1,12 @@
 package com.github.ralberth.playertimewindow;
 
+import com.github.ralberth.playertimewindow.logic.CommandLine;
 import com.github.ralberth.playertimewindow.logic.LoginEventHandler;
-import com.github.ralberth.playertimewindow.logic.Scheduler;
+import com.github.ralberth.playertimewindow.logic.PlayerEjector;
 import com.github.ralberth.playertimewindow.model.AllPlayerSchedules;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
+import com.github.ralberth.playertimewindow.util.PeriodicExecutor;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -14,34 +15,41 @@ public final class PlayerTimeWindow extends JavaPlugin {
 
     public static final String TIMEWINDOWS_COMMAND = "timewindows";
 
-    public static final long TICKS_PER_SECOND = 20;
-    public static final long TICKS_PER_MINUTE = TICKS_PER_SECOND * 60; // 5 TPS * 60 sec/min
+    public static final int MINUTES_BETWEEN_KICK_CHECKS = 5;
 
-    private AllPlayerSchedules schedules;
-    private Scheduler scheduler;
+    private PeriodicExecutor playerEjectorScheduler;
+    private CommandLine cmdline;
 
 
     @Override
     public void onEnable() {
         saveDefaultConfig(); // Creates config.yml from src/main/resources if not present
-        schedules = loadConfig();
+        AllPlayerSchedules schedules = loadConfig();
 
-        if (scheduler != null)
-            scheduler.cancel();
-        scheduler = new Scheduler(this, schedules);
-        scheduler.runTaskTimer(this, 0, 5 * TICKS_PER_MINUTE); // every 5 minutes
+        if (playerEjectorScheduler != null)
+            playerEjectorScheduler.stop();
+
+        PlayerEjector ejector = new PlayerEjector(this, schedules);
+        playerEjectorScheduler = new PeriodicExecutor(this, ejector, MINUTES_BETWEEN_KICK_CHECKS);
+        playerEjectorScheduler.start();
 
         LoginEventHandler logins = new LoginEventHandler(getServer(), schedules);
         getServer().getPluginManager().registerEvents(logins, this);
+
+        cmdline = new CommandLine(schedules);
+        this.getCommand(TIMEWINDOWS_COMMAND).setExecutor(cmdline);
     }
 
 
     @Override
     public void onDisable() {
-        if (scheduler != null) {
-            scheduler.cancel();
-            scheduler = null;
+        if (playerEjectorScheduler != null) {
+            playerEjectorScheduler.stop();
+            playerEjectorScheduler = null;
         }
+
+        HandlerList.unregisterAll(this);
+        cmdline.setActive(false);
     }
 
 
@@ -62,16 +70,5 @@ public final class PlayerTimeWindow extends JavaPlugin {
         }
 
         return aps;
-    }
-
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (cmd.getName().equalsIgnoreCase(TIMEWINDOWS_COMMAND)) { // If the player typed /basic then do the following, note: If you only registered this executor for one command, you don't need this
-            getLogger().info("Player Time Windows from plugins/PlayerTimeWindow/config.yml:");
-            schedules.dump(getLogger());
-            return true;
-        }
-        return false;
     }
 }

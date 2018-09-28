@@ -3,7 +3,6 @@ package com.github.ralberth.playertimewindow.logic;
 import com.github.ralberth.playertimewindow.model.AllPlayerSchedules;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Calendar;
 import java.util.logging.Logger;
@@ -15,7 +14,7 @@ import java.util.logging.Logger;
  * This looks at all currently-logged in users and kicks anyone off that is on the server
  * but shouldn't based on their scheduled hours.
  */
-public class Scheduler extends BukkitRunnable {
+public class PlayerEjector implements Runnable {
 
     public static final String PLAYER_KICK_MESSAGE = "It is now past when you are allowed on the server";
     public static final String BROADCAST_MESSAGE = "%s left the game because it's past their allowed time";
@@ -24,8 +23,7 @@ public class Scheduler extends BukkitRunnable {
     private AllPlayerSchedules schedules;
 
 
-
-    public Scheduler(JavaPlugin plugin, AllPlayerSchedules schedules) {
+    public PlayerEjector(JavaPlugin plugin, AllPlayerSchedules schedules) {
         this.plugin = plugin;
         this.schedules = schedules;
     }
