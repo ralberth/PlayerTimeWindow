@@ -29,7 +29,7 @@ public final class PlayerTimeWindow extends JavaPlugin {
         if (playerEjectorScheduler != null)
             playerEjectorScheduler.stop();
 
-        PlayerEjector ejector = new PlayerEjector(this, schedules);
+        PlayerEjector ejector = new PlayerEjector(this.getServer(), schedules);
         playerEjectorScheduler = new PeriodicExecutor(this, ejector, MINUTES_BETWEEN_KICK_CHECKS);
         playerEjectorScheduler.start();
 

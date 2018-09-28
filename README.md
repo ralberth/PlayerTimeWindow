@@ -39,7 +39,5 @@ Interpretation:
 
 ## TO DO
 
-1. Measure TPS on the server instead of assuming 20 TPS.
 1. Allow minutes instead of just hour ranges in config file
 1. Localize broadcast messages
-1. Warn players 5 minutes before they're kicked-off

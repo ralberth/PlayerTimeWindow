@@ -2,21 +2,14 @@ package com.github.ralberth.playertimewindow.model;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
-import com.tngtech.java.junit.dataprovider.DataProviderRunner;
-import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
 
 
-@RunWith(DataProviderRunner.class)
 public class AllPlayerSchedulesTest {
 
     @Test
