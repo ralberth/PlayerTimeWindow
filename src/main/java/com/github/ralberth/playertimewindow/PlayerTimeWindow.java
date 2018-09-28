@@ -26,11 +26,10 @@ public final class PlayerTimeWindow extends JavaPlugin {
         saveDefaultConfig(); // Creates config.yml from src/main/resources if not present
         schedules = loadConfig();
 
-//        if (scheduler != null)
-//            scheduler.cancel();
-//        scheduler = new Scheduler(this, schedules);
-//
-//        scheduler.runTaskTimer(this, 0, 5 * TICKS_PER_MINUTE);
+        if (scheduler != null)
+            scheduler.cancel();
+        scheduler = new Scheduler(this, schedules);
+        scheduler.runTaskTimer(this, 0, 5 * TICKS_PER_MINUTE); // every 5 minutes
 
         LoginEventHandler logins = new LoginEventHandler(getServer(), schedules);
         getServer().getPluginManager().registerEvents(logins, this);
