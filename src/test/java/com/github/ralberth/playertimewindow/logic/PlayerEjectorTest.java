@@ -2,6 +2,7 @@ package com.github.ralberth.playertimewindow.logic;
 
 
 import com.github.ralberth.playertimewindow.model.AllPlayerSchedules;
+import com.github.ralberth.playertimewindow.util.EnabledStatus;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
@@ -34,6 +35,7 @@ public class PlayerEjectorTest {
 
     Server server;
     AllPlayerSchedules schedules;
+    EnabledStatus status;
     PlayerEjector pe;
 
 
@@ -42,7 +44,8 @@ public class PlayerEjectorTest {
         server = mock(Server.class);
         when(server.getLogger()).thenReturn(Logger.getGlobal());
         schedules = mock(AllPlayerSchedules.class);
-        pe = new PlayerEjector(server, schedules);
+        status = new EnabledStatus();
+        pe = new PlayerEjector(server, schedules, status);
     }
 
 

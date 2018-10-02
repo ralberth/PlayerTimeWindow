@@ -1,6 +1,7 @@
 package com.github.ralberth.playertimewindow.logic;
 
 import com.github.ralberth.playertimewindow.model.AllPlayerSchedules;
+import com.github.ralberth.playertimewindow.util.EnabledStatus;
 import org.bukkit.Server;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,21 +21,25 @@ public class LoginEventHandler implements Listener {
 
     private Server server;
     private AllPlayerSchedules schedules;
+    private EnabledStatus status;
 
 
-    public LoginEventHandler(Server server, AllPlayerSchedules schedules) {
+    public LoginEventHandler(Server server, AllPlayerSchedules schedules, EnabledStatus status) {
         this.server = server;
         this.schedules = schedules;
+        this.status = status;
     }
 
 
     @EventHandler(ignoreCancelled = true)
     public void onLogin(PlayerLoginEvent event) {
-        String playerName = event.getPlayer().getName();
-        Calendar c = Calendar.getInstance();
-        if (!schedules.isPlayerAllowed(playerName, Calendar.getInstance())) {
-            event.disallow(DISALLOW_REASON, REASON_STRING);
-            server.broadcastMessage(playerName + " tried to login outside of their allowed hours");
+        if (status.isEnabled()) {
+            String playerName = event.getPlayer().getName();
+            Calendar c = Calendar.getInstance();
+            if (!schedules.isPlayerAllowed(playerName, Calendar.getInstance())) {
+                event.disallow(DISALLOW_REASON, REASON_STRING);
+                server.broadcastMessage(playerName + " tried to login outside of their allowed hours");
+            }
         }
     }
 }

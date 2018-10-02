@@ -1,6 +1,7 @@
 package com.github.ralberth.playertimewindow.logic;
 
 import com.github.ralberth.playertimewindow.model.AllPlayerSchedules;
+import com.github.ralberth.playertimewindow.util.EnabledStatus;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Sets;
 import org.bukkit.Server;
@@ -37,23 +38,25 @@ public class PlayerEjector implements Runnable {
 
     Server server;
     AllPlayerSchedules schedules;
+    EnabledStatus status;
     Set<Player> warnedPlayersToKickNextCycle;
 
 
-    public PlayerEjector(Server server, AllPlayerSchedules schedules) {
+    public PlayerEjector(Server server, AllPlayerSchedules schedules, EnabledStatus status) {
         this.server = server;
         this.schedules = schedules;
+        this.status = status;
         warnedPlayersToKickNextCycle = new HashSet<>();
     }
 
 
     @Override
     public void run() {
-        //server.getLogger().info("Checking if any players need to be kicked-off");
-        Set<Player> onlinePlayers = new HashSet<>(server.getOnlinePlayers());
-
-        notifyOrKickPlayers(onlinePlayers);
-        clearWarningsForNonactivePlayers(onlinePlayers);
+        if (status.isEnabled()) {
+            Set<Player> onlinePlayers = new HashSet<>(server.getOnlinePlayers());
+            notifyOrKickPlayers(onlinePlayers);
+            clearWarningsForNonactivePlayers(onlinePlayers);
+        }
     }
 
 

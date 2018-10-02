@@ -58,6 +58,6 @@ public class TimeRange {
 
     @Override
     public String toString() {
-        return hourFrom + ":00 - " + (hourTo - 1) + ":59";
+        return hourFrom + ":00-" + (hourTo - 1) + ":59";
     }
 }

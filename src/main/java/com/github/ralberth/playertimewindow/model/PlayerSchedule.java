@@ -1,8 +1,11 @@
 package com.github.ralberth.playertimewindow.model;
 
 import com.google.common.collect.ArrayListMultimap;
+import org.apache.commons.lang.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -40,15 +43,20 @@ public class PlayerSchedule {
     }
 
 
-    public void dumpSchedule(Logger log) {
+    public String dumpSchedule() {
+        List<String> scheds = new ArrayList<String>(); // each entry is one weekday's collection of time ranges
+
         for(DayOfWeek dow : DayOfWeek.values()) {
             List<TimeRange> ranges = timeRanges.get(dow);
             if (ranges != null) {
-                StringBuilder b = new StringBuilder();
+                List<String> timeRangeStrings = new ArrayList<String>();
                 for (TimeRange range : ranges)
-                    b.append(range.toString() + " ");
-                log.info("      " + dow + ": " + b);
+                    timeRangeStrings.add(range.toString());
+                if (!timeRangeStrings.isEmpty())
+                    scheds.add(dow + ": " + StringUtils.join(timeRangeStrings, " "));
             }
         }
+
+        return StringUtils.join(scheds, ", ");
     }
 }

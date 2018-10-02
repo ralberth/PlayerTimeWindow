@@ -11,7 +11,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -35,8 +34,8 @@ public class PlayerScheduleTest {
         List<TimeRange> ranges = sched.timeRanges.get(DayOfWeek.SUN);
         assertEquals(2, ranges.size());
         assertEquals(2, sched.timeRanges.size());
-        assertEquals("9:00 - 9:59", ranges.get(0).toString());
-        assertEquals("11:00 - 11:59", ranges.get(1).toString());
+        assertEquals("9:00-9:59", ranges.get(0).toString());
+        assertEquals("11:00-11:59", ranges.get(1).toString());
     }
 
 
@@ -66,5 +65,19 @@ public class PlayerScheduleTest {
         if (dow != null)
             sched.setDayOfWeekSched(dow, ranges);
         assertTrue(errorMsg, sched.isInRange(cal) == shouldBeInRange);
+    }
+
+
+    @Test
+    public void dumpEmptySchedule() {
+        assertEquals("", sched.dumpSchedule());
+    }
+
+
+    @Test
+    public void dumpSchedules() {
+        sched.setDayOfWeekSched("Mon", "3-5 7-9 15-21");
+        sched.setDayOfWeekSched("Tue", "12-13");
+        assertEquals("Mon: 3:00-4:59 7:00-8:59 15:00-20:59, Tue: 12:00-12:59", sched.dumpSchedule());
     }
 }

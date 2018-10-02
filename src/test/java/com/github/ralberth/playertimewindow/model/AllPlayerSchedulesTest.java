@@ -29,9 +29,9 @@ public class AllPlayerSchedulesTest {
         AllPlayerSchedules aps = createAPS("config_file_tests/players.yml");
         assertEquals(2, aps.schedules.size());
         PlayerSchedule player2 = aps.schedules.get("Player2");
-        assertEquals("9:00 - 10:59",  player2.timeRanges.get(DayOfWeek.MON).get(0).toString());
-        assertEquals("13:00 - 15:59", player2.timeRanges.get(DayOfWeek.MON).get(1).toString());
-        assertEquals("9:00 - 11:59",  player2.timeRanges.get(DayOfWeek.THU).get(0).toString());
+        assertEquals("9:00-10:59",  player2.timeRanges.get(DayOfWeek.MON).get(0).toString());
+        assertEquals("13:00-15:59", player2.timeRanges.get(DayOfWeek.MON).get(1).toString());
+        assertEquals("9:00-11:59",  player2.timeRanges.get(DayOfWeek.THU).get(0).toString());
     }
 
     private static AllPlayerSchedules createAPS(String resourceName) throws Exception {

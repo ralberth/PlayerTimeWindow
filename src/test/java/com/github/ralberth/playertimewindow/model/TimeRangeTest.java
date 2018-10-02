@@ -27,7 +27,7 @@ public class TimeRangeTest {
                 { "4-4",     null, "Low-bound has to be less than high-bound"               },
                 { "9-12-13", null, "Each time range should be two numbers separated by '-'" },
                 { "21-25",   null, "Hours must be between 0 and 24"                         },
-                { "10-15",   "10:00 - 14:59", null }
+                { "10-15",   "10:00-14:59", null }
         };
     }
 

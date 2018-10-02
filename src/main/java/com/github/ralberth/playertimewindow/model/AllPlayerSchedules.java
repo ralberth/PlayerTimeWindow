@@ -3,8 +3,10 @@ package com.github.ralberth.playertimewindow.model;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -55,15 +57,19 @@ public class AllPlayerSchedules {
     }
 
 
-    public void dump(Logger log) {
-        if (schedules.isEmpty()) {
-            log.info("   (empty)");
-        } else {
+    // Returns a list of strings, intended to be printed one string per line by caller
+    public List<String> dump() {
+        List<String> ret = new ArrayList<String>();
+        if (!schedules.isEmpty()) {
             SortedSet<String> players = new TreeSet<>(schedules.keySet());
-            for(String player : players) {
-                log.info("   " + player);
-                schedules.get(player).dumpSchedule(log);
+            if (!players.isEmpty()) {
+                for (String player : players) {
+                    String playerSched = schedules.get(player).dumpSchedule();
+                    if (!playerSched.isEmpty())
+                        ret.add(player + ": " + playerSched);
+                }
             }
         }
+        return ret;
     }
 }

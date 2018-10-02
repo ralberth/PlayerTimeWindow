@@ -4,6 +4,7 @@ import com.github.ralberth.playertimewindow.logic.CommandLine;
 import com.github.ralberth.playertimewindow.logic.LoginEventHandler;
 import com.github.ralberth.playertimewindow.logic.PlayerEjector;
 import com.github.ralberth.playertimewindow.model.AllPlayerSchedules;
+import com.github.ralberth.playertimewindow.util.EnabledStatus;
 import com.github.ralberth.playertimewindow.util.PeriodicExecutor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
@@ -29,14 +30,16 @@ public final class PlayerTimeWindow extends JavaPlugin {
         if (playerEjectorScheduler != null)
             playerEjectorScheduler.stop();
 
-        PlayerEjector ejector = new PlayerEjector(this.getServer(), schedules);
+        EnabledStatus es = new EnabledStatus(); // this "enable" isn't the same as "onEnable()"'s meaning
+
+        PlayerEjector ejector = new PlayerEjector(this.getServer(), schedules, es);
         playerEjectorScheduler = new PeriodicExecutor(this, ejector, MINUTES_BETWEEN_KICK_CHECKS);
         playerEjectorScheduler.start();
 
-        LoginEventHandler logins = new LoginEventHandler(getServer(), schedules);
+        LoginEventHandler logins = new LoginEventHandler(getServer(), schedules, es);
         getServer().getPluginManager().registerEvents(logins, this);
 
-        cmdline = new CommandLine(schedules);
+        cmdline = new CommandLine(schedules, es);
         this.getCommand(TIMEWINDOWS_COMMAND).setExecutor(cmdline);
     }
 
@@ -49,7 +52,6 @@ public final class PlayerTimeWindow extends JavaPlugin {
         }
 
         HandlerList.unregisterAll(this);
-        cmdline.setActive(false);
     }
 
 
